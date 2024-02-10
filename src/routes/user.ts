@@ -1,17 +1,13 @@
 import controllers from "../controllers/user";
-import express, { Router } from "express";
+import express from "express";
 
-function userRoute(): Router {
-  const router = express.Router();
+const router = express.Router();
 
-  // Enable getAllEntries endpoint
-  router.get("/", controllers.getAllUsers);
-  // Enable getRandomEntry endpoint
-  router.get("/random", controllers.getRandomUser);
-  // Enable getEntryByName endpoint
-  router.get("/getByName/:name", controllers.getUserByName);
+// Enable getAllUsers endpoint
+router.get("/", controllers.getAllUsers);
+// Enable getRandomUser endpoint
+router.get("/random", controllers.getRandomUser);
+// Enable getUserByName endpoint
+router.get("/getByName/:name", controllers.getUserByName);
 
-  return router;
-}
-
-export default userRoute;
+export default router;

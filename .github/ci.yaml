@@ -1,0 +1,49 @@
+name: "CI"
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - "main"
+  workflow_dispatch:
+
+env:
+  NODEJS_VERSION: "20"
+  NPM_VERSION: "10"
+
+jobs:
+  ci:
+    name: "Continuous Integration"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Lint source
+        run: pnpm run lint
+
+      - name: Build app
+        run: pnpm run build
+
+      - name: Test app
+        run: pnpm run test

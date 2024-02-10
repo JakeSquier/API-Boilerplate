@@ -12,7 +12,7 @@ function main() {
     const app: Express = express();
     const port = process.env.PORT || 8080;
 
-    // Enable boilerplate controller with a url path prefix of publicapis
+    // Enable boilerplate controller with a url path prefix of users
     app.use("/users", users);
 
     app.listen(port, () => {

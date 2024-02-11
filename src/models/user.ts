@@ -1,5 +1,8 @@
 import moize from "moize";
 import z from "zod";
+import logger from "../common/logging/log";
+import { isProductionEnv } from "../common/environment";
+import { safeGetErrorMessage } from "../common/logging/utilities";
 
 /**
  * A model file is responsible for data interactions may it be an in memory cache
@@ -95,15 +98,19 @@ export default moize.infinite(async (): Promise<User[] | undefined> => {
       const userSchemaValidation = zUserSchema.safeParse(user);
       if (!userSchemaValidation.success) {
         const errors = userSchemaValidation.error.format();
-        console.warn(
-          "Ingested user did not pass schema validation " +
-            JSON.stringify(errors)
+        logger.warn(
+          "Warning user entry did not pass schema validation",
+          errors
         );
       }
     });
 
     return users;
   } catch (ex) {
-    console.error(ex);
+    const safeError = !isProductionEnv()
+      ? safeGetErrorMessage(ex, false)
+      : undefined;
+
+    logger.error("An unexpected error was encountered", safeError);
   }
 });

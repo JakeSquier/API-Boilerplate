@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import getUserData from "../models/user";
-/**
- * This file represents a boilerplate controller. Functions within this controller utilize
- * a public API that provides data on public API's (comical). Follow this outline/pattern
- * for other controllers. As it adhears to the Three-layer app architecture ruleset
- */
+import logger from "../common/logging/log";
+import { isProductionEnv } from "../common/environment";
+import { safeGetErrorMessage } from "../common/logging/utilities";
 
 /**
  * Function returns all user entries
@@ -17,7 +15,12 @@ async function getAllUsers(req: Request, res: Response): Promise<void> {
     const users = await getUserData();
     res.json(users);
   } catch (ex) {
-    res.status(500).send(ex);
+    const safeError = !isProductionEnv()
+      ? safeGetErrorMessage(ex, false)
+      : undefined;
+
+    logger.error("An unexpected error was encountered", safeError);
+    res.status(500).send(safeError);
   }
 }
 
@@ -36,7 +39,12 @@ async function getRandomUser(req: Request, res: Response): Promise<void> {
     const randomIdx = Math.floor(Math.random() * users.length) + 1;
     res.json(users[randomIdx]);
   } catch (ex) {
-    res.status(500).send(ex);
+    const safeError = !isProductionEnv()
+      ? safeGetErrorMessage(ex, false)
+      : undefined;
+
+    logger.error("An unexpected error was encountered", safeError);
+    res.status(500).send(safeError);
   }
 }
 
@@ -59,7 +67,12 @@ async function getUserByName(req: Request, res: Response): Promise<void> {
 
     res.json(user);
   } catch (ex) {
-    res.status(500).send(ex);
+    const safeError = !isProductionEnv()
+      ? safeGetErrorMessage(ex, false)
+      : undefined;
+
+    logger.error("An unexpected error was encountered", safeError);
+    res.status(500).send(safeError);
   }
 }
 

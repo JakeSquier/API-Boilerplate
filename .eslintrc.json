@@ -25,7 +25,7 @@
     ],
     "no-var": "error",
     "@typescript-eslint/no-unused-vars": "warn",
-    "no-console": "off",
+    "no-console": "error",
     "prefer-const": [
       "error",
       {

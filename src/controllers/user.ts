@@ -14,8 +14,8 @@ import getUserData from "../models/user";
  */
 async function getAllUsers(req: Request, res: Response): Promise<void> {
   try {
-    const entries = await getUserData();
-    res.json(entries);
+    const users = await getUserData();
+    res.json(users);
   } catch (ex) {
     res.status(500).send(ex);
   }
@@ -29,9 +29,12 @@ async function getAllUsers(req: Request, res: Response): Promise<void> {
  */
 async function getRandomUser(req: Request, res: Response): Promise<void> {
   try {
-    const entries = await getUserData();
-    const randomIdx = Math.floor(Math.random() * entries.length) + 1;
-    res.json(entries[randomIdx]);
+    const users = await getUserData();
+    if (!users) {
+      throw new Error("Server was unable to retrieve user data");
+    }
+    const randomIdx = Math.floor(Math.random() * users.length) + 1;
+    res.json(users[randomIdx]);
   } catch (ex) {
     res.status(500).send(ex);
   }
@@ -47,9 +50,13 @@ async function getUserByName(req: Request, res: Response): Promise<void> {
   try {
     const name = req.params.name;
     const users = await getUserData();
+    if (!users) {
+      throw new Error("Server was unable to retrieve user data");
+    }
     const user = users.filter(
       (user) => user.name.first.toLowerCase() === name.toLowerCase()
     );
+
     res.json(user);
   } catch (ex) {
     res.status(500).send(ex);

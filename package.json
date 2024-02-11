@@ -6,11 +6,11 @@
   "scripts": {
     "build": "pnpm tsc",
     "start": "pnpm tsc && node ./dist/server.js",
-    "test": "vitest",
+    "test": "vitest run",
     "lint": "pnpm eslint .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "commit": "cz",
-    "prepare": "husky"
+    "cm": "cz",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -42,7 +42,12 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && npx cz --hook || true"
     }
   }
 }

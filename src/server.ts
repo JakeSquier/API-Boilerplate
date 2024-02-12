@@ -1,11 +1,26 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import app from "./app";
+import _app from "./app";
+import warmup from "./warmup";
 import logger from "./common/logging/log";
+import { safeGetErrorMessage } from "./common/logging/utilities";
 
-const port = process.env.PORT || 8080;
+async function main(): Promise<void> {
+  const app = _app();
+  const port = process.env.PORT || 8080;
 
-app.listen(port, () => {
-  logger.info(`[server]: Server is running at http://localhost:${port}`);
+  /** Run warmup tasks */
+  await warmup();
+
+  app.listen(port, () => {
+    logger.info(`[server]: Server is running at http://localhost:${port}`);
+  });
+}
+
+main().catch((ex) => {
+  logger.error(
+    "Critical: Application failed to startup",
+    safeGetErrorMessage(ex, false)
+  );
 });

@@ -1,12 +1,17 @@
 /** Node packages */
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, beforeAll } from "vitest";
 import { createRequest, createResponse } from "node-mocks-http";
 /** Local imports */
 import UserController from "../../controllers/user";
-import { testUserName, User } from "../../models/user";
+import getUserData, { testUserName, User } from "../../models/user";
 
 describe("Testing Get all Users controller", () => {
   const Controller = new UserController();
+
+  beforeAll(async () => {
+    /** Hydrate user cache before testing */
+    await getUserData();
+  });
 
   test("Controller should return a 200 status", async () => {
     const request = createRequest({ method: "GET" });
@@ -20,6 +25,11 @@ describe("Testing Get all Users controller", () => {
 describe("Testing Get random user controller", () => {
   const Controller = new UserController();
 
+  beforeAll(async () => {
+    /** Hydrate user cache before testing */
+    await getUserData();
+  });
+
   test("Controller should return a 200 status", async () => {
     const request = createRequest({ method: "GET" });
     const response = createResponse();
@@ -31,6 +41,11 @@ describe("Testing Get random user controller", () => {
 
 describe("Testing Get user by name controller", () => {
   const Controller = new UserController();
+
+  beforeAll(async () => {
+    /** Hydrate user cache before testing */
+    await getUserData();
+  });
 
   test("Controller should return a 200 status", async () => {
     const request = createRequest({

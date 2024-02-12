@@ -2,30 +2,36 @@
 import { describe, test, expect } from "vitest";
 import { createRequest, createResponse } from "node-mocks-http";
 /** Local imports */
-import contollers from "../../controllers/user";
+import UserController from "../../controllers/user";
 import getUserData, { User } from "../../models/user";
 
 describe("Testing Get all Users controller", () => {
+  const Controller = new UserController();
+
   test("Controller should return a 200 status", async () => {
     const request = createRequest({ method: "GET" });
     const response = createResponse();
-    await contollers.getAllUsers(request, response);
+    await Controller.getAllUsers(request, response);
 
     expect(response.statusCode).toBe(200);
   });
 });
 
 describe("Testing Get random user controller", () => {
+  const Controller = new UserController();
+
   test("Controller should return a 200 status", async () => {
     const request = createRequest({ method: "GET" });
     const response = createResponse();
-    await contollers.getRandomUser(request, response);
+    await Controller.getRandomUser(request, response);
 
     expect(response.statusCode).toBe(200);
   });
 });
 
 describe("Testing Get user by name controller", () => {
+  const Controller = new UserController();
+
   test("Controller should return a 200 status", async () => {
     const testName = "jane";
     const users = await getUserData();
@@ -42,7 +48,7 @@ describe("Testing Get user by name controller", () => {
       params: { name: testName }
     });
     const response = createResponse();
-    await contollers.getUserByName(request, response);
+    await Controller.getUserByName(request, response);
     const data = response._getJSONData() as User[];
 
     expect(response.statusCode).toBe(200);

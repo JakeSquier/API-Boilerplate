@@ -40,6 +40,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       
+      - name: Add relevant environment variables
+        run: |
+          echo "RUNTIME_ENV=${{ secrets.RUNTIME_ENV }}" >> .env
+      
       - name: Lint source
         run: pnpm run lint
 

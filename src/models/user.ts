@@ -85,12 +85,21 @@ type UsersAPIResponse = {
 };
 
 /**
+ * Users are ingested using a seed. So on cache refresh
+ * we should recieve the same set of users. Reference
+ * the variable below for a permeating test user
+ */
+export const testUserName = "Eileen";
+
+/**
  * Utilizing a moize cache with an infinite max age
  * so we won't have to make recurring API calls
  */
 export default moize.infinite(async (): Promise<User[] | undefined> => {
   try {
-    const users = await fetch("https://randomuser.me/api/?results=100")
+    const users = await fetch(
+      "https://randomuser.me/api/?results=100&seed=a6bef31c7e3ed2f5"
+    )
       .then((res) => res.json())
       .then((data: UsersAPIResponse) => data.results);
 

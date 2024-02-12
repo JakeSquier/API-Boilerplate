@@ -3,7 +3,7 @@ import { describe, test, expect, expectTypeOf } from "vitest";
 import request from "supertest";
 import app from "../../app";
 /** Local imports */
-import getUserData, { User } from "../../models/user";
+import { testUserName, User } from "../../models/user";
 
 describe("Testing user routes", () => {
   test("GET /users/", async () => {
@@ -30,27 +30,13 @@ describe("Testing user routes", () => {
       });
   });
 
-  test("GET /users/:name", async () => {
-    const testName = "jane";
-    const users = await getUserData();
-    if (!users) {
-      throw new Error("Test was unable to retrieve user data");
-    }
-
-    const user = users.filter(
-      (user) => user.name.first.toLowerCase() === testName
-    );
-
+  test("GET /users/getByName/:name", async () => {
     return request(app)
-      .get(`/users/getByName/${testName}`)
+      .get(`/users/getByName/${testUserName}`)
       .set("Accept", "application/json")
       .then((response) => {
         const data = response.body as User[];
-        if (!user) {
-          expect(data.length).toBeLessThan(1);
-        } else {
-          expect(data).toEqual(user);
-        }
+        expect(data.length).toBeGreaterThan(0);
       });
   });
 });

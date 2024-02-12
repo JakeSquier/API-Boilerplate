@@ -7,6 +7,7 @@
     "build": "pnpm tsc",
     "start": "pnpm tsc && node ./dist/server.js",
     "test": "vitest run",
+    "bench": "vitest bench",
     "lint": "pnpm eslint .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "cm": "cz",
